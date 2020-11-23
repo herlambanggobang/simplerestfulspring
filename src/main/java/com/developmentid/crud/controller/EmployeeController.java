@@ -32,6 +32,10 @@ public class EmployeeController {
 
     @PostMapping
     public ResponseEntity<?> postEmployee(@RequestBody Employee employee) {
+
+        if(employeeRepository.findByFirstName(employee.getFirstName()) != null)
+            return new ResponseEntity<>(employee, HttpStatus.CONFLICT);
+
         employeeRepository.save(employee);
         return new ResponseEntity<>(employee, HttpStatus.CREATED);
 
@@ -79,6 +83,18 @@ public class EmployeeController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         employeeRepository.deleteById(id);
+        return new ResponseEntity<>(employeeExisting, HttpStatus.OK);
+
+    }
+
+    @GetMapping("/getByFirstName/{firstName}")
+    public ResponseEntity<?> findEmployeeByFirstName(@PathVariable String firstName) {
+
+        Employee employeeExisting = employeeRepository.findByFirstName(firstName);
+
+        if(employeeExisting == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
         return new ResponseEntity<>(employeeExisting, HttpStatus.OK);
 
     }
