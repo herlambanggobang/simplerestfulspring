@@ -9,4 +9,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     public Employee findByFirstName(String firstName);
 
+    public Employee findByUsername(String username);
+
 }
